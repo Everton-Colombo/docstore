@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  web:
+    build: .
+    container_name: data-api
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      # MONGO_URI points to the mongo service.
+      - MONGO_URI=mongodb://mongo:27017/mydatabase
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:
